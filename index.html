@@ -3,147 +3,323 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>964 Street Bites - Interactive Menu</title>
+    <title>964 Street Bites - Live TV Menu</title>
     <style>
         :root {
-            --bg-color: #121212;
-            --card-bg: #1e1e1e;
+            --bg-color: #0d0d0d;
+            --card-bg: #1a1a1a;
             --accent-color: #ff5722;
             --text-color: #ffffff;
             --gray-text: #b0b0b0;
+            --border-color: #333333;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         body {
-            margin: 0;
-            padding: 0;
             background-color: var(--bg-color);
             color: var(--text-color);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             overflow-x: hidden;
         }
 
+        /* رأس الصفحة المتحرك */
         header {
             text-align: center;
-            padding: 20px;
+            padding: 25px;
             background-color: #000;
-            border-bottom: 3px solid var(--accent-color);
+            border-bottom: 4px solid var(--accent-color);
+            box-shadow: 0 5px 20px rgba(255, 87, 34, 0.3);
+            animation: slideDown 1s ease-out;
         }
 
         header h1 {
-            margin: 0;
-            font-size: 2.5rem;
+            font-size: 3rem;
             color: var(--accent-color);
+            letter-spacing: 2px;
+            margin-bottom: 5px;
         }
 
-        .menu-container {
+        header p {
+            font-size: 1.2rem;
+            color: var(--gray-text);
+        }
+
+        /* شبكة عرض الوجبات */
+        .menu-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 20px;
+            gap: 25px;
             padding: 30px;
-            max-width: 1400px;
+            max-width: 1600px;
             margin: 0 auto;
         }
 
+        /* بطاقة الوجبة التفاعلية */
         .menu-card {
             background-color: var(--card-bg);
-            border-radius: 12px;
+            border-radius: 14px;
+            border: 1px solid var(--border-color);
             overflow: hidden;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.4);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border: 1px solid #333;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+            transition: transform 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
+            animation: fadeIn 0.8s ease-in-out;
+            position: relative;
         }
 
         .menu-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 24px rgba(255, 87, 34, 0.2);
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(255, 87, 34, 0.25);
+            border-color: var(--accent-color);
         }
 
-        .menu-card img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
+        .card-body {
+            padding: 22px;
         }
 
-        .menu-content {
-            padding: 20px;
-        }
-
-        .menu-title {
-            font-size: 1.5rem;
-            margin-bottom: 10px;
+        .item-title {
+            font-size: 1.8rem;
             color: var(--accent-color);
+            margin-bottom: 8px;
+            font-weight: bold;
         }
 
-        .menu-desc {
-            font-size: 0.95rem;
+        .item-desc {
+            font-size: 1.05rem;
             color: var(--gray-text);
             margin-bottom: 15px;
-            line-height: 1.5;
+            line-height: 1.6;
         }
 
-        .price-tag {
-            font-size: 1.25rem;
+        /* قسم الأسعار */
+        .price-box {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #111;
+            padding: 12px 18px;
+            border-radius: 8px;
+            border-right: 4px solid var(--accent-color);
+            margin-top: 10px;
+        }
+
+        .price-label {
+            font-size: 1.1rem;
+            color: #ddd;
+        }
+
+        .price-value {
+            font-size: 1.3rem;
             font-weight: bold;
             color: #fff;
             background-color: var(--accent-color);
-            padding: 6px 15px;
+            padding: 4px 12px;
             border-radius: 6px;
+        }
+
+        .dual-price {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+            justify-content: space-between;
+        }
+
+        .sub-price {
+            background-color: #262626;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 1rem;
+            color: #fff;
+        }
+        
+        .sub-price span {
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+
+        /* شريط التمرير السفلي المتحرك للإعلانات */
+        .ticker-wrap {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: #000;
+            border-top: 2px solid var(--accent-color);
+            color: #fff;
+            padding: 12px 0;
+            overflow: hidden;
+            white-space: nowrap;
+            z-index: 1000;
+        }
+
+        .ticker {
             display: inline-block;
+            animation: ticker 25s linear infinite;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--accent-color);
         }
 
-        /* تأثير الحركة عند التحميل */
-        .fade-in {
-            animation: fadeIn 0.8s ease-in-out;
+        .ticker span {
+            margin-right: 50px;
+            color: #fff;
         }
 
+        /* الحركات (Animations) */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes ticker {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
         }
     </style>
 </head>
 <body>
 
-    <header class="fade-in">
+    <header>
         <h1>964 STREET BITES</h1>
-        <p>نكهة الشارع... بأسلوبنا</p>
+        <p>نكهة الشارع... بأسلوبنا الاحترافي</p>
     </header>
 
-    <div class="menu-container">
-        <!-- عنصر 1: تاكوز -->
-        <div class="menu-card fade-in">
-            <div class="menu-content">
-                <div class="menu-title">تاكوز (TACOS)</div>
-                <div class="menu-desc">3 قطع تاكو محشوة باختيارك من اللحم أو الدجاج مع خس طازج، جبنة موزاريلا، وصوص 964 المميز.</div>
-                <div class="price-tag">لحم: 6,000 د.ع | دجاج: 5,500 د.ع</div>
+    <div class="menu-grid">
+        <!-- 1. تاكوز -->
+        <div class="menu-card">
+            <div class="card-body">
+                <div class="item-title">تاكوز (TACOS)</div>
+                <div class="item-desc">3 قطع تاكو محشوة باختيارك (كرنشي، سبايسي، تشيزي) مع خس طازج، جبنة موزاريلا، وصوص 964 المميز.</div>
+                <div class="dual-price">
+                    <div class="sub-price">لحم: <span>6000 د.ع</span></div>
+                    <div class="sub-price">دجاج: <span>5500 د.ع</span></div>
+                </div>
             </div>
         </div>
 
-        <!-- عنصر 2: كومبو 964 -->
-        <div class="menu-card fade-in">
-            <div class="menu-content">
-                <div class="menu-title">كومبو 964 (COMBO 964)</div>
-                <div class="menu-desc">تاكو + كريسبي فرايز + بوريتو + صوص خاص + كولا.</div>
-                <div class="price-tag">10,000 د.ع</div>
+        <!-- 2. كومبو 964 -->
+        <div class="menu-card">
+            <div class="card-body">
+                <div class="item-title">كومبو 964 (COMBO 964)</div>
+                <div class="item-desc">يحتوي على: تاكو (قطعة واحدة) + كريسبي فرايز + بوريتو + صوص خاص + كولا.</div>
+                <div class="price-box">
+                    <span class="price-label">السعر الكلي</span>
+                    <span class="price-value">10,000 د.ع</span>
+                </div>
             </div>
         </div>
 
-        <!-- عنصر 3: كومبير -->
-        <div class="menu-card fade-in">
-            <div class="menu-content">
-                <div class="menu-title">كومبير (KÜMPIR)</div>
-                <div class="menu-desc">بطاطا مشوية بالفرن مع زبد وموزاريلا ومحشوة بأجود الإضافات.</div>
-                <div class="price-tag">لحم: 5,000 د.ع | دجاج: 4,500 د.ع</div>
+        <!-- 3. كومبير -->
+        <div class="menu-card">
+            <div class="card-body">
+                <div class="item-title">كومبير (KÜMPIR)</div>
+                <div class="menu-desc">بطاطا مشوية بالفرن مع زبد وموزاريلا ومحشوة بأجود الإضافات الخاصة.</div>
+                <div class="dual-price">
+                    <div class="sub-price">لحم: <span>5000 د.ع</span></div>
+                    <div class="sub-price">دجاج: <span>4500 د.ع</span></div>
+                </div>
             </div>
         </div>
 
-        <!-- عنصر 4: بوريتو -->
-        <div class="menu-card fade-in">
-            <div class="menu-content">
-                <div class="menu-title">بوريتو (BURRITO)</div>
-                <div class="menu-desc">كريسبي مع فنجر، جبنة الشيدر الذائبة، خس طازج، مخلل، وصوص 964 الخاص.</div>
-                <div class="price-tag">5,000 د.ع</div>
+        <!-- 4. وجبة المشاركة -->
+        <div class="menu-card">
+            <div class="card-body">
+                <div class="item-title">وجبة المشاركة (SHARING MEAL)</div>
+                <div class="menu-desc">2 تاكو دجاج - 2 تاكو لحم - طبق فنجر بالجبن - 2 كولا - 2 صوص.</div>
+                <div class="price-box">
+                    <span class="price-label">السعر الكلي</span>
+                    <span class="price-value">10,000 د.ع</span>
+                </div>
             </div>
+        </div>
+
+        <!-- 5. كريسبي بوكس -->
+        <div class="menu-card">
+            <div class="card-body">
+                <div class="item-title">كريسبي بوكس (CRISPY BOX)</div>
+                <div class="menu-desc">4 قطع كريسبي + بطاطا فنجر + صوص + كولا.</div>
+                <div class="price-box">
+                    <span class="price-label">السعر الكلي</span>
+                    <span class="price-value">7,000 د.ع</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 6. بوريتو -->
+        <div class="menu-card">
+            <div class="card-body">
+                <div class="item-title">بوريتو (BURRITO)</div>
+                <div class="menu-desc">كريسبي مع فنجر، جبنة الشيدر الذائبة، خس طازج، مخلل، وصوص 964 الخاص. (إمكانية طلبها كوجبة مع فنجر وكولا بـ +1500 د.ع).</div>
+                <div class="price-box">
+                    <span class="price-label">السعر</span>
+                    <span class="price-value">5,000 د.ع</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 7. زنجر -->
+        <div class="menu-card">
+            <div class="card-body">
+                <div class="item-title">زنجر (ZINGER)</div>
+                <div class="menu-desc">قطع دجاج مقرمشة مع خبز فرنسي طازج، خس طازج، وصوصاتنا المميزة.</div>
+                <div class="price-box">
+                    <span class="price-label">السعر</span>
+                    <span class="price-value">4,000 د.ع</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 8. ريزو -->
+        <div class="menu-card">
+            <div class="card-body">
+                <div class="item-title">ريزو (RIZO)</div>
+                <div class="menu-desc">أرز ريزو مميز يقدم مع الصوص الخاص.</div>
+                <div class="price-box">
+                    <span class="price-label">ريزو + كولا</span>
+                    <span class="price-value">5,000 د.ع</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 9. كريسبي فرايز وبرغر فرايز -->
+        <div class="menu-card">
+            <div class="card-body">
+                <div class="item-title">فرايز (FRIES)</div>
+                <div class="menu-desc">أصابع بطاطا ذهبية ومقرمشة مع شريحة برجر وجبن ذائب وهالبينو وخضار وصوص مميز.</div>
+                <div class="dual-price">
+                    <div class="sub-price">برغر فرايز: <span>5000 د.ع</span></div>
+                    <div class="sub-price">كريسبي فرايز: <span>4000 د.ع</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 10. شيبس فرايز -->
+        <div class="menu-card">
+            <div class="card-body">
+                <div class="item-title">شيبس فرايز (CHIPS FRIES)</div>
+                <div class="menu-desc">اختر شيبسك المفضل (دريتوس، ليز، جيتوس) مع إضافات: كريسبي، ذرة، زيتون، هالبينو، جبن شيدر، خس، مخلل وصوصات.</div>
+                <div class="price-box">
+                    <span class="price-label">السعر</span>
+                    <span class="price-value">3,500 د.ع</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- شريط الإعلانات المتحرك أسفل الشاشة -->
+    <div class="ticker-wrap">
+        <div class="ticker">
+            <span>🔥 أهلاً بكم في 964 Street Bites - حديقة حي المدراء - البصرة 🔥</span>
+            <span>✨ نكهة الشارع... بأسلوبنا المميز ✨</span>
+            <span>🚀 اطلب الآن عبر الواتساب أو تفضل بزيارتنا يومياً من 6 مساءً حتى 2 فجراً 🚀</span>
         </div>
     </div>
 
