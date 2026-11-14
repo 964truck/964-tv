@@ -1,327 +1,1212 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>964 Street Bites - Live TV Menu</title>
-    <style>
-        :root {
-            --bg-color: #0d0d0d;
-            --card-bg: #1a1a1a;
-            --accent-color: #ff5722;
-            --text-color: #ffffff;
-            --gray-text: #b0b0b0;
-            --border-color: #333333;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>964 Street Bites | المنيو الرسمي</title>
+<style>
+:root {
+  --bg-color: #f7f4ed;
+  --card-bg: #ffffff;
+  --main-green: #112d22;
+  --accent-green: #1b4d3e;
+  --accent-orange: #ff6600;
+  --text-dark: #222222;
+  --text-muted: #666666;
+  --header-bg-image: linear-gradient(45deg, #112d22 25%, #0b1f17 25%, #0b1f17 50%, #112d22 50%, #112d22 75%, #0b1f17 75%, #0b1f17 100%);
+}
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+/* الوضع الليلي (Dark Mode) */
+body.dark-mode {
+  --bg-color: #121212;
+  --card-bg: #1e1e1e;
+  --main-green: #0b1f17;
+  --accent-green: #ff6600;
+  --accent-orange: #ff8833;
+  --text-dark: #f0f0f0;
+  --text-muted: #aaaaaa;
+  --header-bg-image: linear-gradient(45deg, #0b1f17 25%, #050d0a 25%, #050d0a 50%, #0b1f17 50%, #0b1f17 75%, #050d0a 75%, #050d0a 100%);
+}
 
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            overflow-x: hidden;
-        }
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-dark);
+  margin: 0;
+  padding: 0;
+  scroll-behavior: smooth;
+  transition: background 0.3s, color 0.3s;
+}
 
-        /* رأس الصفحة المتحرك */
-        header {
-            text-align: center;
-            padding: 25px;
-            background-color: #000;
-            border-bottom: 4px solid var(--accent-color);
-            box-shadow: 0 5px 20px rgba(255, 87, 34, 0.3);
-            animation: slideDown 1s ease-out;
-        }
+.header {
+  text-align: center;
+  padding: 18px 15px;
+  background: var(--main-green);
+  color: white;
+  border-bottom: 5px solid var(--accent-orange);
+  background-image: var(--header-bg-image);
+  background-size: 24px 24px;
+  position: relative;
+}
 
-        header h1 {
-            font-size: 3rem;
-            color: var(--accent-color);
-            letter-spacing: 2px;
-            margin-bottom: 5px;
-        }
+.mexican-hat-badge {
+  font-size: 26px;
+  display: inline-block;
+  margin-bottom: 2px;
+  animation: floatHat 3s ease-in-out infinite;
+}
+@keyframes floatHat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
 
-        header p {
-            font-size: 1.2rem;
-            color: var(--gray-text);
-        }
+.header h1 {
+  margin: 0 0 5px 0;
+  color: #ffffff;
+  font-size: 26px;
+  font-weight: 900;
+  letter-spacing: 1px;
+}
+.header p {
+  margin: 0 0 8px 0;
+  color: #ffaa55;
+  font-size: 13px;
+  font-weight: bold;
+}
+.working-hours {
+  display: inline-block;
+  background: rgba(0, 0, 0, 0.4);
+  color: #ffcc00;
+  padding: 4px 14px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: bold;
+  border: 1px solid rgba(255, 204, 0, 0.3);
+  margin-top: 3px;
+}
 
-        /* شبكة عرض الوجبات */
-        .menu-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 25px;
-            padding: 30px;
-            max-width: 1600px;
-            margin: 0 auto;
-        }
+.top-controls-grid {
+  max-width: 650px;
+  margin: 12px auto;
+  padding: 0 15px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  box-sizing: border-box;
+}
+.control-pill {
+  background: var(--main-green);
+  color: white;
+  border: 1px solid var(--accent-orange);
+  padding: 8px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  text-decoration: none;
+  transition: 0.2s;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+.control-pill:hover {
+  background: var(--accent-orange);
+  color: #fff;
+}
 
-        /* بطاقة الوجبة التفاعلية */
-        .menu-card {
-            background-color: var(--card-bg);
-            border-radius: 14px;
-            border: 1px solid var(--border-color);
-            overflow: hidden;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
-            transition: transform 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
-            animation: fadeIn 0.8s ease-in-out;
-            position: relative;
-        }
+.badge-status {
+  background: var(--main-green);
+  color: #25d366;
+  border: 1px solid #25d366;
+  padding: 8px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  grid-column: span 2;
+}
+.badge-status.closed {
+  color: #ff4444;
+  border-color: #ff4444;
+}
 
-        .menu-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 15px 30px rgba(255, 87, 34, 0.25);
-            border-color: var(--accent-color);
-        }
+.share-banner {
+  max-width: 650px;
+  margin: 5px auto 10px auto;
+  padding: 0 15px;
+  box-sizing: border-box;
+  text-align: center;
+}
+.btn-share {
+  background: var(--card-bg);
+  color: var(--main-green);
+  border: 2px dashed var(--accent-orange);
+  padding: 7px 16px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+body.dark-mode .btn-share {
+  background: var(--card-bg);
+  color: #ffaa55;
+}
 
-        .card-body {
-            padding: 22px;
-        }
+.slideshow-container {
+  max-width: 650px;
+  position: relative;
+  margin: 10px auto;
+  padding: 0 15px;
+  box-sizing: border-box;
+}
+.slide {
+  display: none;
+  text-align: center;
+}
+.slide img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 3px solid var(--accent-orange);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+.fade {
+  animation: fadeEffect 1.5s;
+}
+@keyframes fadeEffect {
+  from { opacity: 0.4; }
+  to { opacity: 1; }
+}
 
-        .item-title {
-            font-size: 1.8rem;
-            color: var(--accent-color);
-            margin-bottom: 8px;
-            font-weight: bold;
-        }
+.nav-categories {
+  background: var(--main-green);
+  padding: 10px;
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  white-space: nowrap;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+  border-bottom: 2px solid var(--accent-orange);
+}
+.nav-categories::-webkit-scrollbar {
+  display: none;
+}
+.nav-btn {
+  background: var(--accent-green);
+  color: white;
+  border: none;
+  padding: 7px 14px;
+  border-radius: 15px;
+  font-size: 13px;
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: none;
+  transition: 0.2s;
+}
+.nav-btn:hover {
+  background: var(--accent-orange);
+  color: #fff;
+}
 
-        .item-desc {
-            font-size: 1.05rem;
-            color: var(--gray-text);
-            margin-bottom: 15px;
-            line-height: 1.6;
-        }
+.container {
+  max-width: 650px;
+  margin: 0 auto;
+  padding: 15px;
+}
+.section-title {
+  color: #ffffff;
+  background-color: var(--main-green);
+  font-size: 16px;
+  margin: 25px 0 12px 0;
+  font-weight: bold;
+  padding: 10px 15px;
+  border-radius: 6px;
+  border-left: 5px solid var(--accent-orange);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.item-card {
+  background: var(--card-bg);
+  border-radius: 10px;
+  padding: 14px;
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 2px dashed var(--accent-orange);
+  box-shadow: 0 3px 6px rgba(0,0,0,0.05);
+  position: relative;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.item-info {
+  flex: 1;
+  min-width: 200px;
+}
+.item-info h3 {
+  margin: 0 0 4px 0;
+  font-size: 16px;
+  color: var(--main-green);
+  font-weight: 800;
+}
+body.dark-mode .item-info h3 {
+  color: #ffaa55;
+}
+.item-info p {
+  margin: 0 0 6px 0;
+  color: var(--text-muted);
+  font-size: 12px;
+  line-height: 1.4;
+}
+.normal-price {
+  color: white;
+  background-color: var(--main-green);
+  font-weight: bold;
+  font-size: 13px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  display: inline-block;
+  margin-top: 5px;
+}
 
-        /* قسم الأسعار */
-        .price-box {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: #111;
-            padding: 12px 18px;
-            border-radius: 8px;
-            border-right: 4px solid var(--accent-color);
-            margin-top: 10px;
-        }
+/* قسم استوديو السيلفي المكسيكي الجديد */
+.selfie-booth-card {
+  background: var(--card-bg);
+  border: 2px dashed var(--accent-orange);
+  border-radius: 12px;
+  padding: 15px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+.selfie-booth-card h3 {
+  color: var(--accent-orange);
+  margin-top: 0;
+}
+.upload-btn-label {
+  background: var(--accent-orange);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 13px;
+  cursor: pointer;
+  display: inline-block;
+  margin-top: 8px;
+  box-shadow: 0 3px 8px rgba(255, 102, 0, 0.3);
+}
+#canvasContainer {
+  position: relative;
+  max-width: 100%;
+  margin: 10px auto;
+  display: none;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 3px solid var(--main-green);
+}
+#resultCanvas {
+  width: 100%;
+  height: auto;
+  display: block;
+}
 
-        .price-label {
-            font-size: 1.1rem;
-            color: #ddd;
-        }
+.variant-group {
+  display: flex;
+  gap: 6px;
+  margin: 8px 0;
+  flex-wrap: wrap;
+}
+.variant-btn {
+  background: #fff;
+  color: var(--main-green);
+  border: 1px solid var(--accent-orange);
+  padding: 5px 12px;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 11px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+body.dark-mode .variant-btn {
+  background: #2a2a2a;
+  color: #fff;
+}
+.variant-btn.active {
+  background: var(--accent-orange);
+  color: #fff;
+  border-color: var(--accent-orange);
+}
 
-        .price-value {
-            font-size: 1.3rem;
-            font-weight: bold;
-            color: #fff;
-            background-color: var(--accent-color);
-            padding: 4px 12px;
-            border-radius: 6px;
-        }
+.meal-upgrade-box {
+  background: rgba(255, 102, 0, 0.1);
+  border: 1px solid var(--accent-orange);
+  padding: 5px 8px;
+  border-radius: 6px;
+  margin: 6px 0;
+  font-size: 11px;
+  font-weight: bold;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--text-dark);
+}
 
-        .dual-price {
-            display: flex;
-            gap: 10px;
-            width: 100%;
-            justify-content: space-between;
-        }
+.extras-box {
+  width: 100%;
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 1px solid rgba(0,0,0,0.1);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+.extra-option {
+  background: var(--card-bg);
+  border: 1px solid var(--accent-orange);
+  padding: 3px 7px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
 
-        .sub-price {
-            background-color: #262626;
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 1rem;
-            color: #fff;
-        }
-        
-        .sub-price span {
-            color: var(--accent-color);
-            font-weight: bold;
-        }
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--card-bg);
+  padding: 6px 10px;
+  border-radius: 20px;
+  border: 1px solid var(--accent-orange);
+}
+.btn-qty {
+  background: var(--main-green);
+  color: white;
+  border: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.qty-num {
+  font-size: 15px;
+  font-weight: bold;
+  min-width: 15px;
+  text-align: center;
+  color: var(--text-dark);
+}
 
-        /* شريط التمرير السفلي المتحرك للإعلانات */
-        .ticker-wrap {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            background-color: #000;
-            border-top: 2px solid var(--accent-color);
-            color: #fff;
-            padding: 12px 0;
-            overflow: hidden;
-            white-space: nowrap;
-            z-index: 1000;
-        }
+.options-container {
+  max-width: 650px;
+  margin: 15px auto 0 auto;
+  padding: 0 15px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.custom-input {
+  width: 100%;
+  background: var(--card-bg);
+  border: 2px dashed var(--accent-orange);
+  border-radius: 8px;
+  padding: 10px;
+  color: var(--text-dark);
+  font-size: 13px;
+  font-family: inherit;
+  box-sizing: border-box;
+  outline: none;
+}
 
-        .ticker {
-            display: inline-block;
-            animation: ticker 25s linear infinite;
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: var(--accent-color);
-        }
+#welcomeModal {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.75);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 15px;
+}
+.modal-content {
+  background: var(--card-bg);
+  color: var(--text-dark);
+  padding: 20px;
+  border-radius: 12px;
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+  border: 3px solid var(--accent-orange);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+}
+.modal-content h3 {
+  color: var(--accent-orange);
+  margin-top: 0;
+}
+.modal-content p {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+.modal-btn {
+  background: #25d366;
+  color: white;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
+  font-size: 14px;
+}
+.modal-checkbox {
+  margin-top: 15px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  cursor: pointer;
+}
 
-        .ticker span {
-            margin-right: 50px;
-            color: #fff;
-        }
-
-        /* الحركات (Animations) */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes ticker {
-            0% { transform: translateX(100%); }
-            100% { transform: translateX(-100%); }
-        }
-    </style>
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(17, 45, 34, 0.98);
+  backdrop-filter: blur(10px);
+  padding: 10px 15px;
+  text-align: center;
+  border-top: 3px solid var(--accent-orange);
+  z-index: 100;
+  box-shadow: 0 -4px 10px rgba(0,0,0,0.2);
+}
+body.dark-mode .footer {
+  background: rgba(11, 31, 23, 0.98);
+}
+.live-counter {
+  max-width: 450px;
+  margin: 0 auto 5px auto;
+  background: #0b1f17;
+  color: #ffcc00;
+  padding: 5px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+}
+.checkout-box {
+  max-width: 450px;
+  margin: 0 auto 6px auto;
+  display: flex;
+  gap: 8px;
+}
+.checkout-box select {
+  flex: 1;
+  background: #fff;
+  color: #111;
+  border: none;
+  padding: 6px;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 12px;
+  cursor: pointer;
+}
+.btn-order {
+  background: #25d366;
+  color: white;
+  border: none;
+  padding: 9px 20px;
+  font-size: 14px;
+  font-weight: bold;
+  border-radius: 30px;
+  cursor: pointer;
+  width: 100%;
+  max-width: 450px;
+  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+}
+</style>
 </head>
-<body>
+<body id="bodyRoot">
 
-    <header>
-        <h1>964 STREET BITES</h1>
-        <p>نكهة الشارع... بأسلوبنا الاحترافي</p>
-    </header>
-
-    <div class="menu-grid">
-        <!-- 1. تاكوز -->
-        <div class="menu-card">
-            <div class="card-body">
-                <div class="item-title">تاكوز (TACOS)</div>
-                <div class="item-desc">3 قطع تاكو محشوة باختيارك (كرنشي، سبايسي، تشيزي) مع خس طازج، جبنة موزاريلا، وصوص 964 المميز.</div>
-                <div class="dual-price">
-                    <div class="sub-price">لحم: <span>6000 د.ع</span></div>
-                    <div class="sub-price">دجاج: <span>5500 د.ع</span></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 2. كومبو 964 -->
-        <div class="menu-card">
-            <div class="card-body">
-                <div class="item-title">كومبو 964 (COMBO 964)</div>
-                <div class="item-desc">يحتوي على: تاكو (قطعة واحدة) + كريسبي فرايز + بوريتو + صوص خاص + كولا.</div>
-                <div class="price-box">
-                    <span class="price-label">السعر الكلي</span>
-                    <span class="price-value">10,000 د.ع</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- 3. كومبير -->
-        <div class="menu-card">
-            <div class="card-body">
-                <div class="item-title">كومبير (KÜMPIR)</div>
-                <div class="menu-desc">بطاطا مشوية بالفرن مع زبد وموزاريلا ومحشوة بأجود الإضافات الخاصة.</div>
-                <div class="dual-price">
-                    <div class="sub-price">لحم: <span>5000 د.ع</span></div>
-                    <div class="sub-price">دجاج: <span>4500 د.ع</span></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 4. وجبة المشاركة -->
-        <div class="menu-card">
-            <div class="card-body">
-                <div class="item-title">وجبة المشاركة (SHARING MEAL)</div>
-                <div class="menu-desc">2 تاكو دجاج - 2 تاكو لحم - طبق فنجر بالجبن - 2 كولا - 2 صوص.</div>
-                <div class="price-box">
-                    <span class="price-label">السعر الكلي</span>
-                    <span class="price-value">10,000 د.ع</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- 5. كريسبي بوكس -->
-        <div class="menu-card">
-            <div class="card-body">
-                <div class="item-title">كريسبي بوكس (CRISPY BOX)</div>
-                <div class="menu-desc">4 قطع كريسبي + بطاطا فنجر + صوص + كولا.</div>
-                <div class="price-box">
-                    <span class="price-label">السعر الكلي</span>
-                    <span class="price-value">7,000 د.ع</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- 6. بوريتو -->
-        <div class="menu-card">
-            <div class="card-body">
-                <div class="item-title">بوريتو (BURRITO)</div>
-                <div class="menu-desc">كريسبي مع فنجر، جبنة الشيدر الذائبة، خس طازج، مخلل، وصوص 964 الخاص. (إمكانية طلبها كوجبة مع فنجر وكولا بـ +1500 د.ع).</div>
-                <div class="price-box">
-                    <span class="price-label">السعر</span>
-                    <span class="price-value">5,000 د.ع</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- 7. زنجر -->
-        <div class="menu-card">
-            <div class="card-body">
-                <div class="item-title">زنجر (ZINGER)</div>
-                <div class="menu-desc">قطع دجاج مقرمشة مع خبز فرنسي طازج، خس طازج، وصوصاتنا المميزة.</div>
-                <div class="price-box">
-                    <span class="price-label">السعر</span>
-                    <span class="price-value">4,000 د.ع</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- 8. ريزو -->
-        <div class="menu-card">
-            <div class="card-body">
-                <div class="item-title">ريزو (RIZO)</div>
-                <div class="menu-desc">أرز ريزو مميز يقدم مع الصوص الخاص.</div>
-                <div class="price-box">
-                    <span class="price-label">ريزو + كولا</span>
-                    <span class="price-value">5,000 د.ع</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- 9. كريسبي فرايز وبرغر فرايز -->
-        <div class="menu-card">
-            <div class="card-body">
-                <div class="item-title">فرايز (FRIES)</div>
-                <div class="menu-desc">أصابع بطاطا ذهبية ومقرمشة مع شريحة برجر وجبن ذائب وهالبينو وخضار وصوص مميز.</div>
-                <div class="dual-price">
-                    <div class="sub-price">برغر فرايز: <span>5000 د.ع</span></div>
-                    <div class="sub-price">كريسبي فرايز: <span>4000 د.ع</span></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 10. شيبس فرايز -->
-        <div class="menu-card">
-            <div class="card-body">
-                <div class="item-title">شيبس فرايز (CHIPS FRIES)</div>
-                <div class="menu-desc">اختر شيبسك المفضل (دريتوس، ليز، جيتوس) مع إضافات: كريسبي، ذرة، زيتون، هالبينو، جبن شيدر، خس، مخلل وصوصات.</div>
-                <div class="price-box">
-                    <span class="price-label">السعر</span>
-                    <span class="price-value">3,500 د.ع</span>
-                </div>
-            </div>
-        </div>
+<!-- دليل الاستخدام التفاعلي -->
+<div id="welcomeModal" style="display:none;">
+  <div class="modal-content">
+    <h3>🇲🇽 أهلاً بك في 964 Street Bites! 🌮</h3>
+    <p>طريقة الطلب سهلة وسريعة:<br>
+    1️⃣ اطلب وجبتك المفضل وعدل الإضافات.<br>
+    2️⃣ جرب "استوديو السيلفي المكسيكي" وارفع صورتك مع القبعة!<br>
+    3️⃣ اختر طريقة الدفع واضغط إرسال للواتساب!</p>
+    <button class="modal-btn" onclick="closeWelcomeModal()">فهمت، ابدأ الطلب 🚀</button>
+    <div class="modal-checkbox">
+      <input type="checkbox" id="dontShowAgain" onclick="toggleDontShow()"> عدم إظهار هذه الرسالة مرة أخرى
     </div>
+  </div>
+</div>
 
-    <!-- شريط الإعلانات المتحرك أسفل الشاشة -->
-    <div class="ticker-wrap">
-        <div class="ticker">
-            <span>🔥 أهلاً بكم في 964 Street Bites - حديقة حي المدراء - البصرة 🔥</span>
-            <span>✨ نكهة الشارع... بأسلوبنا المميز ✨</span>
-            <span>🚀 اطلب الآن عبر الواتساب أو تفضل بزيارتنا يومياً من 6 مساءً حتى 2 فجراً 🚀</span>
-        </div>
+<div class="header">
+  <div class="mexican-hat-badge">🇲🇽🌮</div>
+  <h1>964 STREET BITES</h1>
+  <p>نكهة الشارع المكسيكي أصلي... بأسلوبنا المميز 🌶️</p>
+  <div class="working-hours">⏰ أوقات العمل الرسمية: من 6:00 مساءً إلى 2:00 صباحاً</div>
+</div>
+
+<div class="top-controls-grid">
+  <div class="badge-status" id="shopStatus">جاري التحقق من وقت العمل...</div>
+
+  <button class="control-pill" onclick="showWelcomeModal()">❓ كيف تطلب؟</button>
+  <button class="control-pill" onclick="toggleDarkMode()">🌙 <span id="darkText">الوضع الليلي</span></button>
+
+  <a href="https://instagram.com/964truck" target="_blank" class="control-pill">📸 انستغرام</a>
+  <a href="https://tiktok.com/@964truck" target="_blank" class="control-pill">🎬 تيك توك</a>
+
+  <a href="javascript:void(0);" onclick="openMap()" class="control-pill">📍 موقعنا (حي المدراء)</a>
+  <a href="tel:07722202416" class="control-pill">📞 07722202416</a>
+</div>
+
+<div class="share-banner">
+  <button class="btn-share" onclick="shareMenu()">🔗 شارك المنيو مع أصدقائك في السهرة</button>
+</div>
+
+<!-- سلايدر الصور -->
+<div class="slideshow-container">
+  <div class="slide fade"><img src="964Deal.PNG" alt="عروض 964"></div>
+  <div class="slide fade"><img src="Burrito.jpg.PNG" alt="بوريتو 964"></div>
+  <div class="slide fade"><img src="Mune.jpg.jpg" alt="منيو 964"></div>
+  <div class="slide fade"><img src="Taco.jpg.PNG" alt="تاكو 964"></div>
+</div>
+
+<!-- أزرار التنقل السريع -->
+<div class="nav-categories">
+  <a href="#bestsellers" class="nav-btn">⭐ الأكثر مبيعاً</a>
+  <a href="#booth" class="nav-btn">📸 استوديو السيلفي</a>
+  <a href="#offers" class="nav-btn">🔥 العروض</a>
+  <a href="#tacos" class="nav-btn">🌮 التاكو</a>
+  <a href="#burritos" class="nav-btn">🌯 البوريتو</a>
+  <a href="#sandwiches" class="nav-btn">🥪 ساندويتشات</a>
+  <a href="#meals" class="nav-btn">📦 الوجبات</a>
+  <a href="#rizo" class="nav-btn">🍛 الريزو</a>
+  <a href="#fries" class="nav-btn">🥔 الفرايز</a>
+  <a href="#extras" class="nav-btn">🥤 المشروبات</a>
+</div>
+
+<div class="container">
+
+  <!-- قسم استوديو السيلفي المكسيكي (ميزة إضافة القبعة وشعار @964truck) -->
+  <div id="booth" class="section-title">📸 استوديو السيلفي المكسيكي (جرب القبعة!)</div>
+  <div class="selfie-booth-card">
+    <p>ارفع صورتك الشخصية وسيقوم المنيو بإضافة القبعة المكسيكية وشعار الحساب <strong>@964truck</strong> تلقائياً!</p>
+    <label class="upload-btn-label">
+      📁 اختر صورتك من الاستوديو
+      <input type="file" id="userPhotoInput" accept="image/*" style="display:none;" onchange="processUserPhoto(event)">
+    </label>
+    
+    <div id="canvasContainer">
+      <canvas id="resultCanvas"></canvas>
+      <div style="margin-top: 10px;">
+        <a id="downloadLink" download="964_Mexican_Selfie.png" class="upload-btn-label" style="background:#25d366; text-decoration:none;">📥 تحميل الصورة المصممة</a>
+      </div>
     </div>
+  </div>
+  
+  <!-- قسم الأكثر مبيعاً -->
+  <div id="bestsellers" class="section-title">⭐ الأكثر مبيعاً في 964</div>
+
+  <div class="item-card">
+    <div class="item-info">
+      <h3>تاكو مكسيكي (3 قطع)</h3>
+      <p>3 قطع تاكو طازجة مع خس، جبنة موزريلا، وصوص 964 المميز</p>
+      <div class="variant-group">
+        <button type="button" class="variant-btn active" id="bs_btn_meat" onclick="setBestsellerType('meat')">🥩 لحم (6,000)</button>
+        <button type="button" class="variant-btn" id="bs_btn_chicken" onclick="setBestsellerType('chicken')">🍗 دجاج (5,500)</button>
+      </div>
+      <div class="extras-box">
+        <label class="extra-option"><input type="checkbox" id="bs_extra_cheese"> جبن زيادة (+500)</label>
+        <label class="extra-option"><input type="checkbox" id="bs_extra_spicy"> صوص سبايسي 🌶️</label>
+        <label class="extra-option"><input type="checkbox" id="bs_no_onion"> بدون بصل 🧅</label>
+        <label class="extra-option"><input type="checkbox" id="bs_no_jalapeno"> بدون هالبينو</label>
+      </div>
+      <div class="normal-price" id="bs_taco_price">6,000 د.ع</div>
+    </div>
+    <div class="controls">
+      <button class="btn-qty" onclick="changeQty('bs_taco', -1)">-</button>
+      <span class="qty-num" id="qty-bs_taco">0</span>
+      <button class="btn-qty" onclick="changeQty('bs_taco', 1)">+</button>
+    </div>
+  </div>
+
+  <div class="item-card">
+    <div class="item-info">
+      <h3>بوريتو فنكر كرسبي</h3>
+      <p>كرسبي مع فنكر، جبنة الشيدر الذائبة، خس طازج، مخلل، وصوص 964 الخاص</p>
+      <label class="meal-upgrade-box">
+        <input type="checkbox" id="bs_burrito_meal" onchange="updateTotal()"> اجعلها وجبة (+فنكر وكولا بـ 1500) 🍟🥤
+      </label>
+      <div class="extras-box">
+        <label class="extra-option"><input type="checkbox" id="b_extra_cheese"> جبن زيادة (+500)</label>
+        <label class="extra-option"><input type="checkbox" id="b_no_pickles"> بدون مخلل</label>
+        <label class="extra-option"><input type="checkbox" id="b_no_onion"> بدون بصل</label>
+      </div>
+      <div class="normal-price">5,000 د.ع</div>
+    </div>
+    <div class="controls">
+      <button class="btn-qty" onclick="changeQty('bs_burrito', -1)">-</button>
+      <span class="qty-num" id="qty-bs_burrito">0</span>
+      <button class="btn-qty" onclick="changeQty('bs_burrito', 1)">+</button>
+    </div>
+  </div>
+
+  <!-- قسم العروض -->
+  <div id="offers" class="section-title">🔥 عروض السهرة الحصرية</div>
+  <div class="item-card">
+    <div class="item-info">
+      <h3>عرض لمة الأصدقاء (كومبو مزدوج)</h3>
+      <p>2 تاكو + 2 بوريتو كرسبي + 2 كولا + صوصات الشيف السرية</p>
+      <div class="normal-price">18,000 د.ع</div>
+    </div>
+    <div class="controls">
+      <button class="btn-qty" onclick="changeQty('offer1', -1)">-</button>
+      <span class="qty-num" id="qty-offer1">0</span>
+      <button class="btn-qty" onclick="changeQty('offer1', 1)">+</button>
+    </div>
+  </div>
+
+  <!-- قسم التاكو -->
+  <div id="tacos" class="section-title">🌮 التاكو (TACOS)</div>
+  <div class="item-card">
+    <div class="item-info">
+      <h3>تاكو مكسيكي (3 قطع)</h3>
+      <p>3 قطع تاكو محشوّة مع خس طازج، جبنة موزريلا، وصوص 964 المميز</p>
+      <div class="variant-group">
+        <button type="button" class="variant-btn active" id="btn_meat" onclick="setMainTacoType('meat')">🥩 لحم (6,000)</button>
+        <button type="button" class="variant-btn" id="btn_chicken" onclick="setMainTacoType('chicken')">🍗 دجاج (5,500)</button>
+      </div>
+      <div class="extras-box">
+        <label class="extra-option"><input type="checkbox" id="extra_cheese"> جبن زيادة (+500)</label>
+        <label class="extra-option"><input type="checkbox" id="extra_spicy"> صوص سبايسي 🌶️</label>
+        <label class="extra-option"><input type="checkbox" id="no_onion"> بدون بصل</label>
+        <label class="extra-option"><input type="checkbox" id="no_jalapeno"> بدون هالبينو</label>
+      </div>
+      <div class="normal-price" id="taco_price">6,000 د.ع</div>
+    </div>
+    <div class="controls">
+      <button class="btn-qty" onclick="changeQty('taco', -1)">-</button>
+      <span class="qty-num" id="qty-taco">0</span>
+      <button class="btn-qty" onclick="changeQty('taco', 1)">+</button>
+    </div>
+  </div>
+
+  <!-- قسم البوريتو -->
+  <div id="burritos" class="section-title">🌯 البوريتو (BURRITO)</div>
+  <div class="item-card">
+    <div class="item-info">
+      <h3>بوريتو فنكر كرسبي</h3>
+      <p>كرسبي مع فنكر، جبنة الشيدر الذائبة، خس طازج، مخلل، وصوص 964 الخاص</p>
+      <label class="meal-upgrade-box">
+        <input type="checkbox" id="burrito_meal" onchange="updateTotal()"> اجعلها وجبة (+فنكر وكولا بـ 1500) 🍟🥤
+      </label>
+      <div class="extras-box">
+        <label class="extra-option"><input type="checkbox" id="burrito_no_onion"> بدون بصل</label>
+        <label class="extra-option"><input type="checkbox" id="burrito_extra_cheese"> جبن زيادة (+500)</label>
+      </div>
+      <div class="normal-price">5,000 د.ع</div>
+    </div>
+    <div class="controls">
+      <button class="btn-qty" onclick="changeQty('burrito', -1)">-</button>
+      <span class="qty-num" id="qty-burrito">0</span>
+      <button class="btn-qty" onclick="changeQty('burrito', 1)">+</button>
+    </div>
+  </div>
+
+  <div class="item-card">
+    <div class="item-info">
+      <h3>بوريتو رز دجاج</h3>
+      <p>مذاق مميز محشو بالرز الخاص والدجاج وأجود الإضافات والصوص</p>
+      <label class="meal-upgrade-box">
+        <input type="checkbox" id="burritoricedchicken_meal" onchange="updateTotal()"> اجعلها وجبة (+فنكر وكولا بـ 1500) 🍟🥤
+      </label>
+      <div class="extras-box">
+        <label class="extra-option"><input type="checkbox" id="b_rice_c_cheese"> جبن زيادة (+500)</label>
+      </div>
+      <div class="normal-price">7,000 د.ع</div>
+    </div>
+    <div class="controls">
+      <button class="btn-qty" onclick="changeQty('burritoricedchicken', -1)">-</button>
+      <span class="qty-num" id="qty-burritoricedchicken">0</span>
+      <button class="btn-qty" onclick="changeQty('burritoricedchicken', 1)">+</button>
+    </div>
+  </div>
+
+  <div class="item-card">
+    <div class="item-info">
+      <h3>بوريتو رز لحم</h3>
+      <p>مذاق مميز محشو بالرز الخاص واللحم وأجود الإضافات والصوص</p>
+      <label class="meal-upgrade-box">
+        <input type="checkbox" id="burritoricedmeat_meal" onchange="updateTotal()"> اجعلها وجبة (+فنكر وكولا بـ 1500) 🍟🥤
+      </label>
+      <div class="extras-box">
+        <label class="extra-option"><input type="checkbox" id="b_rice_m_cheese"> جبن زيادة (+500)</label>
+      </div>
+      <div class="normal-price">8,000 د.ع</div>
+    </div>
+    <div class="controls">
+      <button class="btn-qty" onclick="changeQty('burritoricedmeat', -1)">-</button>
+      <span class="qty-num" id="qty-burritoricedmeat">0</span>
+      <button class="btn-qty" onclick="changeQty('burritoricedmeat', 1)">+</button>
+    </div>
+  </div>
+
+  <!-- قسم الساندويتشات -->
+  <div id="sandwiches" class="section-title">🥪 ساندويتشات</div>
+  <div class="item-card">
+    <div class="item-info">
+      <h3>زنجر (ZINGER)</h3>
+      <p>قطع دجاج مقرمشة مع خبز فرنسي طازج وخس طازج وصوصاتنا المميزة</p>
+      <label class="meal-upgrade-box">
+        <input type="checkbox" id="zinger_meal" onchange="updateTotal()"> اجعلها وجبة (+فنكر وكولا بـ 1500) 🍟🥤
+      </label>
+      <div class="extras-box">
+        <label class="extra-option"><input type="checkbox" id="zinger_spicy"> صوص سبايسي زيادة 🌶️</label>
+        <label class="extra-option"><input type="checkbox" id="zinger_no_lettuce"> بدون خس</label>
+        <label class="extra-option"><input type="checkbox" id="zinger_extra_cheese"> جبن زيادة (+500)</label>
+      </div>
+      <div class="normal-price">4,000 د.ع</div>
+    </div>
+    <div class="controls">
+      <button class="btn-qty" onclick="changeQty('zinger', -1)">-</button>
+      <span class="qty-num" id="qty-zinger">0</span>
+      <button class="btn-qty" onclick="changeQty('zinger', 1)">+</button>
+    </div>
+  </div>
+
+  <!-- قسم الوجبات الخاصة -->
+  <div id="meals" class="section-title">📦 الوجبات الخاصة</div>
+  <div class="item-card">
+    <div class="item-info"><h3>كريسبي بوكس</h3><p>4 قطع كرسبي، بطاطا فنكر، صوص، كولا</p><div class="normal-price">7,000 د.ع</div></div>
+    <div class="controls"><button class="btn-qty" onclick="changeQty('crispybox', -1)">-</button><span class="qty-num" id="qty-crispybox">0</span><button class="btn-qty" onclick="changeQty('crispybox', 1)">+</button></div>
+  </div>
+  <div class="item-card">
+    <div class="item-info"><h3>كومبو 964 العملاق</h3><p>تاكو + كرسبي فرايز + بوريتو + صوص + كولا</p><div class="normal-price">10,000 د.ع</div></div>
+    <div class="controls"><button class="btn-qty" onclick="changeQty('combo964', -1)">-</button><span class="qty-num" id="qty-combo964">0</span><button class="btn-qty" onclick="changeQty('combo964', 1)">+</button></div>
+  </div>
+
+  <!-- قسم الريزو المحدث -->
+  <div id="rizo" class="section-title">🍛 ريزو (مع كولا)</div>
+  <div class="item-card">
+    <div class="item-info">
+      <h3>ريزو</h3>
+      <p>أرز ريزو دجاج لذيذ مع صوص الشيف وعلبة كولا باردة</p>
+      <div class="variant-group">
+        <button type="button" class="variant-btn active" id="rizo_btn_classic" onclick="setRizoType('classic')">⭐ كلاسك (5,000)</button>
+        <button type="button" class="variant-btn" id="rizo_btn_spicy" onclick="setRizoType('spicy')">🌶️ سبايسي (5,000)</button>
+        <button type="button" class="variant-btn" id="rizo_btn_mix" onclick="setRizoType('mix')">🔥 مكس (5,000)</button>
+      </div>
+      <div class="extras-box">
+        <label class="extra-option"><input type="checkbox" id="rizo_extra_cheese"> جبن زيادة (+500)</label>
+      </div>
+      <div class="normal-price">5,000 د.ع</div>
+    </div>
+    <div class="controls">
+      <button class="btn-qty" onclick="changeQty('rizo', -1)">-</button>
+      <span class="qty-num" id="qty-rizo">0</span>
+      <button class="btn-qty" onclick="changeQty('rizo', 1)">+</button>
+    </div>
+  </div>
+
+  <!-- قسم الفرايز -->
+  <div id="fries" class="section-title">🥔 الفرايز والبطاطا</div>
+  <div class="item-card"><div class="item-info"><h3>قدح فنكر</h3><div class="normal-price">1,500 د.ع</div></div><div class="controls"><button class="btn-qty" onclick="changeQty('cupfries', -1)">-</button><span class="qty-num" id="qty-cupfries">0</span><button class="btn-qty" onclick="changeQty('cupfries', 1)">+</button></div></div>
+  <div class="item-card"><div class="item-info"><h3>كومبير دجاج</h3><div class="normal-price">4,500 د.ع</div></div><div class="controls"><button class="btn-qty" onclick="changeQty('kumpirchicken', -1)">-</button><span class="qty-num" id="qty-kumpirchicken">0</span><button class="btn-qty" onclick="changeQty('kumpirchicken', 1)">+</button></div></div>
+  <div class="item-card"><div class="item-info"><h3>كومبير لحم</h3><div class="normal-price">5,000 د.ع</div></div><div class="controls"><button class="btn-qty" onclick="changeQty('kumpirmeat', -1)">-</button><span class="qty-num" id="qty-kumpirmeat">0</span><button class="btn-qty" onclick="changeQty('kumpirmeat', 1)">+</button></div></div>
+  <div class="item-card"><div class="item-info"><h3>كريسبي فرايز</h3><div class="normal-price">4,000 د.ع</div></div><div class="controls"><button class="btn-qty" onclick="changeQty('crispyfries', -1)">-</button><span class="qty-num" id="qty-crispyfries">0</span><button class="btn-qty" onclick="changeQty('crispyfries', 1)">+</button></div></div>
+  <div class="item-card"><div class="item-info"><h3>شيبس فرايز</h3><div class="normal-price">3,500 د.ع</div></div><div class="controls"><button class="btn-qty" onclick="changeQty('chipsfries', -1)">-</button><span class="qty-num" id="qty-chipsfries">0</span><button class="btn-qty" onclick="changeQty('chipsfries', 1)">+</button></div></div>
+
+  <!-- قسم الإضافات -->
+  <div id="extras" class="section-title">🥤 الصوصات والمشروبات</div>
+  <div class="item-card"><div class="item-info"><h3>صوص جبن</h3><div class="normal-price">500 د.ع</div></div><div class="controls"><button class="btn-qty" onclick="changeQty('s_cheese', -1)">-</button><span class="qty-num" id="qty-s_cheese">0</span><button class="btn-qty" onclick="changeQty('s_cheese', 1)">+</button></div></div>
+  <div class="item-card"><div class="item-info"><h3>كولا</h3><div class="normal-price">500 د.ع</div></div><div class="controls"><button class="btn-qty" onclick="changeQty('cola', -1)">-</button><span class="qty-num" id="qty-cola">0</span><button class="btn-qty" onclick="changeQty('cola', 1)">+</button></div></div>
+
+  <!-- خانة ملاحظات الزبون واسمه -->
+  <div class="options-container">
+    <input type="text" id="customerName" class="custom-input" placeholder="👤 اسم الزبون الكريم (اختياري)">
+    <input type="text" id="pickupTime" class="custom-input" placeholder="⏳ وقت الاستلام (مثلاً: أصل خلال 20 دقيقة)">
+    <input type="text" id="orderNotes" class="custom-input" placeholder="✍️ ملاحظات خاصة على الطلب (بدون بصل، حار جداً...)">
+  </div>
+
+</div>
+
+<div style="height: 170px;"></div>
+
+<div class="footer">
+  <div class="live-counter">
+    <span>🛒 القطع: <strong id="totalCount">0</strong></span>
+    <span>💵 المجموع: <strong id="totalPrice">0</strong> د.ع</span>
+  </div>
+
+  <div class="checkout-box">
+    <select id="paymentMethod" onchange="checkPayment()">
+      <option value="cash">نقداً عند الاستلام</option>
+      <option value="qi">كي كارد (تحويل: 5513312792)</option>
+      <option value="zain">زين كاش</option>
+    </select>
+    <select id="deliveryFee" onchange="updateTotal()">
+      <option value="3000">توصيل مركز البصرة (3,000)</option>
+      <option value="5000">الأقضية والنواحي (5,000)</option>
+      <option value="0">استلام مباشر من الشاحنة (0)</option>
+    </select>
+  </div>
+  <button class="btn-order" onclick="sendOrder()">إرسال الطلب عبر الواتساب 📲</button>
+</div>
+
+<script>
+let cart = {
+  bs_taco: 0, bs_burrito: 0, offer1: 0, taco: 0, burrito: 0, burritoricedchicken: 0, burritoricedmeat: 0, 
+  zinger: 0, crispybox: 0, combo964: 0, rizo: 0, 
+  cupfries: 0, kumpirchicken: 0, kumpirmeat: 0, crispyfries: 0, chipsfries: 0, 
+  s_cheese: 0, cola: 0
+};
+
+let bsTacoType = 'meat';
+let mainTacoType = 'meat';
+let rizoType = 'classic';
+
+function setBestsellerType(type) {
+  bsTacoType = type;
+  document.getElementById('bs_btn_meat').classList.toggle('active', type === 'meat');
+  document.getElementById('bs_btn_chicken').classList.toggle('active', type === 'chicken');
+  updateTotal();
+}
+
+function setMainTacoType(type) {
+  mainTacoType = type;
+  document.getElementById('btn_meat').classList.toggle('active', type === 'meat');
+  document.getElementById('btn_chicken').classList.toggle('active', type === 'chicken');
+  updateTotal();
+}
+
+function setRizoType(type) {
+  rizoType = type;
+  document.getElementById('rizo_btn_classic').classList.toggle('active', type === 'classic');
+  document.getElementById('rizo_btn_spicy').classList.toggle('active', type === 'spicy');
+  document.getElementById('rizo_btn_mix').classList.toggle('active', type === 'mix');
+  updateTotal();
+}
+
+const basePrices = {
+  bs_taco: 6000, bs_burrito: 5000, offer1: 18000, taco: 6000, burrito: 5000,
+  burritoricedchicken: 7000, burritoricedmeat: 8000, zinger: 4000,
+  crispybox: 7000, combo964: 10000, rizo: 5000, cupfries: 1500, kumpirchicken: 4500, kumpirmeat: 5000,
+  crispyfries: 4000, chipsfries: 3500, s_cheese: 500, cola: 500
+};
+
+const itemNames = {
+  bs_taco: "⭐ تاكو (الأكثر مبيعاً)", bs_burrito: "⭐ بوريتو فنكر كرسبي",
+  offer1: "🔥 عرض لمة الأصدقاء", taco: "🌮 تاكو مكسيكي", burrito: "🌯 بوريتو فنكر كرسبي",
+  burritoricedchicken: "🌯 بوريتو رز دجاج", burritoricedmeat: "🌯 بوريتو رز لحم",
+  zinger: "🥪 زنجر", crispybox: "📦 كرسبي بوكس", combo964: "🔥 كومبو 964 العملاق",
+  rizo: "🍛 ريزو",
+  cupfries: "🥔 قدح فنكر", kumpirchicken: "🥔 كومبير دجاج", kumpirmeat: "🥔 كومبير لحم",
+  crispyfries: "🍟 كريسبي فرايز", chipsfries: "🍟 شيبس فرايز",
+  s_cheese: "🧀 صوص جبن", cola: "🥤 كولا"
+};
+
+function changeQty(item, delta) {
+  cart[item] = Math.max(0, (cart[item] || 0) + delta);
+  document.getElementById('qty-' + item).innerText = cart[item];
+  updateTotal();
+}
+
+function updateTotal() {
+  let count = 0;
+  let itemsTotal = 0;
+  
+  for (let key in cart) {
+    if (cart[key] > 0) {
+      count += cart[key];
+      let p = basePrices[key];
+      
+      if (key === 'bs_taco' && bsTacoType === 'chicken') p = 5500;
+      if (key === 'taco' && mainTacoType === 'chicken') p = 5500;
+      
+      // إضافات الجبن
+      if ((key === 'bs_taco' && document.getElementById('bs_extra_cheese')?.checked) ||
+          (key === 'taco' && document.getElementById('extra_cheese')?.checked) ||
+          (key === 'bs_burrito' && document.getElementById('b_extra_cheese')?.checked) ||
+          (key === 'burrito' && document.getElementById('burrito_extra_cheese')?.checked) ||
+          (key === 'zinger' && document.getElementById('zinger_extra_cheese')?.checked) ||
+          (key === 'rizo' && document.getElementById('rizo_extra_cheese')?.checked)) {
+        p += 500;
+      }
+      
+      // ترقية الوجبة (+1500) للبوريتوات والزنجر
+      if ((key === 'bs_burrito' && document.getElementById('bs_burrito_meal')?.checked) ||
+          (key === 'burrito' && document.getElementById('burrito_meal')?.checked) ||
+          (key === 'burritoricedchicken' && document.getElementById('burritoricedchicken_meal')?.checked) ||
+          (key === 'burritoricedmeat' && document.getElementById('burritoricedmeat_meal')?.checked) ||
+          (key === 'zinger' && document.getElementById('zinger_meal')?.checked)) {
+        p += 1500;
+      }
+
+      itemsTotal += cart[key] * p;
+    }
+  }
+  
+  let delivery = parseInt(document.getElementById('deliveryFee').value);
+  document.getElementById('totalCount').innerText = count;
+  document.getElementById('totalPrice').innerText = itemsTotal > 0 ? (itemsTotal + delivery).toLocaleString() : '0';
+}
+
+function checkPayment() {
+  let method = document.getElementById('paymentMethod').value;
+  if (method === 'qi') {
+    alert("رقم بطاقة الكي كارد للتحويل المالي: 5513312792\nيرجى إرسال إيصال التحويل عبر الواتساب مع الطلب.");
+  }
+}
+
+function sendOrder() {
+  let customerName = document.getElementById('customerName').value.trim();
+  let message = `مرحباً 964 Street Bites 🌮🇲🇽%0A`;
+  if (customerName !== "") message += `👤 اسم الزبون: ${customerName}%0A`;
+  message += `----------------------------%0A`;
+  
+  let itemsTotal = 0;
+  
+  for (let key in cart) {
+    if (cart[key] > 0) {
+      let p = basePrices[key];
+      let details = "";
+      
+      if (key === 'bs_taco') {
+        let t = bsTacoType === 'meat' ? 'لحم' : 'دجاج';
+        p = (t === 'لحم') ? 6000 : 5500;
+        details += ` (${t})`;
+        if (document.getElementById('bs_extra_cheese').checked) { p += 500; details += " + جبن زيادة"; }
+        if (document.getElementById('bs_extra_spicy').checked) details += " + صوص سبايسي";
+        if (document.getElementById('bs_no_onion').checked) details += " - بدون بصل";
+        if (document.getElementById('bs_no_jalapeno').checked) details += " - بدون هالبينو";
+      } else if (key === 'taco') {
+        let t = mainTacoType === 'meat' ? 'لحم' : 'دجاج';
+        p = (t === 'لحم') ? 6000 : 5500;
+        details += ` (${t})`;
+        if (document.getElementById('extra_cheese').checked) { p += 500; details += " + جبن زيادة"; }
+        if (document.getElementById('extra_spicy').checked) details += " + صوص سبايسي";
+        if (document.getElementById('no_onion').checked) details += " - بدون بصل";
+        if (document.getElementById('no_jalapeno').checked) details += " - بدون هالبينو";
+      } else if (key === 'rizo') {
+        let rType = rizoType === 'classic' ? 'كلاسك' : (rizoType === 'spicy' ? 'سبايسي' : 'مكس');
+        details += ` (${rType} + كولا)`;
+        if (document.getElementById('rizo_extra_cheese').checked) { p += 500; details += " + جبن زيادة"; }
+      } else if (key === 'bs_burrito') {
+        if (document.getElementById('b_extra_cheese').checked) { p += 500; details += " + جبن زيادة"; }
+        if (document.getElementById('b_no_pickles').checked) details += " - بدون مخلل";
+        if (document.getElementById('b_no_onion').checked) details += " - بدون بصل";
+      } else if (key === 'burrito') {
+        if (document.getElementById('burrito_no_onion').checked) details += " - بدون بصل";
+        if (document.getElementById('burrito_extra_cheese').checked) { p += 500; details += " + جبن زيادة"; }
+      } else if (key === 'zinger') {
+        if (document.getElementById('zinger_spicy').checked) details += " + صوص سبايسي";
+        if (document.getElementById('zinger_no_lettuce').checked) details += " - بدون خس";
+        if (document.getElementById('zinger_extra_cheese').checked) { p += 500; details += " + جبن زيادة"; }
+      }
+
+      let mealCheck = document.getElementById(key + '_meal') || (key === 'bs_burrito' ? document.getElementById('bs_burrito_meal') : null);
+      if (mealCheck && mealCheck.checked) {
+        p += 1500;
+        details += " [ترقية وجبة: فنكر + كولا]";
+      }
+
+      let itemTotal = cart[key] * p;
+      message += `${itemNames[key]}${details}: ${cart[key]} (${itemTotal} د.ع)%0A`;
+      itemsTotal += itemTotal;
+    }
+  }
+  
+  if (itemsTotal === 0) { alert("الرجاء اختيار وجبة واحدة على الأقل!"); return; }
+  
+  let paymentMethodText = document.getElementById('paymentMethod').selectedOptions[0].text;
+  message += `----------------------------%0A💳 طريقة الدفع: ${paymentMethodText}%0A`;
+
+  let pickup = document.getElementById('pickupTime').value.trim();
+  if (pickup) message += `⏳ وقت الاستلام: ${pickup}%0A`;
+
+  let notes = document.getElementById('orderNotes').value.trim();
+  if (notes) message += `📝 ملاحظات الزبون: ${notes}%0A`;
+
+  let deliverySelect = document.getElementById('deliveryFee');
+  let deliveryCost = parseInt(deliverySelect.value);
+  let grandTotal = itemsTotal + deliveryCost;
+  
+  message += `🛵 التوصيل: ${deliverySelect.selectedOptions[0].text}%0A`;
+  message += `💰 المجموع الكلي: ${grandTotal.toLocaleString()} د.ع`;
+
+  window.open(`https://wa.me/9647722202416?text=${message}`, '_blank');
+}
+
+/* وظيفة استوديو السيلفي المكسيكي (رسم القبعة وشعار @964truck على صورة الزبون) */
+function processUserPhoto(event) {
+  let file = event.target.files[0];
+  if (!file) return;
+
+  let reader = new FileReader();
+  reader.onload = function(e) {
+    let img = new Image();
+    img.onload = function() {
+      let canvas = document.getElementById('resultCanvas');
+      let ctx = canvas.getContext('2d');
+      
+      // ضبط أبعاد الكانفاس لتتطابق مع أبعاد الصورة
+      canvas.width = img.width;
+      canvas.height = img.height;
+
+      // رسم صورة الزبون الأصلية
+      ctx.drawImage(img, 0, 0);
+
+      // رسم القبعة المكسيكية (رسم توضيحي ذكي أو شكل قبعة في أعلى الوسط)
+      ctx.fillStyle = "#d4a373"; // لون القش
+      let hatWidth = img.width * 0.4;
+      let hatHeight = img.height * 0.15;
+      let hatX = (img.width - hatWidth) / 2;
+      let hatY = img.height * 0.05;
+
+      // حافة القبعة الواسعة
+      ctx.beginPath();
+      ctx.ellipse(img.width / 2, hatY + hatHeight * 0.8, hatWidth / 2, hatHeight * 0.3, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+
+      // قمة القبعة المرتفعة
+      ctx.fillRect(hatX + hatWidth * 0.25, hatY, hatWidth * 0.5, hatHeight * 0.8);
+
+      // شريط ملون على القبعة (برتقالي نيون خاص بـ 964)
+      ctx.fillStyle = "#ff6600";
+      ctx.fillRect(hatX + hatWidth * 0.25, hatY + hatHeight * 0.5, hatWidth * 0.5, hatHeight * 0.2);
+
+      // كتابة يوزر الفود تراك @964truck في زاوية الصورة
+      ctx.font = `bold ${Math.max(20, img.width * 0.04)}px sans-serif`;
+      ctx.fillStyle = "#ffffff";
+      ctx.strokeStyle = "#000000";
+      ctx.lineWidth = 4;
+      let text = "@964truck";
+      let textX = img.width * 0.05;
+      let textY = img.height * 0.95;
+      
+      ctx.strokeText(text, textX, textY);
+      ctx.fillText(text, textX, textY);
+
+      // إظهار الحاوية ورابط التحميل
+      document.getElementById('canvasContainer').style.display = 'block';
+      let dataURL = canvas.toDataURL('image/png');
+      document.getElementById('downloadLink').href = dataURL;
+    }
+    img.src = e.target.result;
+  }
+  reader.readAsDataURL(file);
+}
+
+/* الوضع الليلي */
+function toggleDarkMode() {
+  let body = document.getElementById('bodyRoot');
+  body.classList.toggle('dark-mode');
+  let isDark = body.classList.contains('dark-mode');
+  document.getElementById('darkText').innerText = isDark ? "الوضع النهاري" : "الوضع الليلي";
+  localStorage.setItem('theme964', isDark ? 'dark' : 'light');
+}
+
+if (localStorage.getItem('theme964') === 'dark') {
+  document.getElementById('bodyRoot').classList.add('dark-mode');
+  document.getElementById('darkText').innerText = "الوضع النهاري";
+}
+
+/* دليل الاستخدام */
+function showWelcomeModal() {
+  document.getElementById('welcomeModal').style.display = 'flex';
+}
+
+function closeWelcomeModal() {
+  document.getElementById('welcomeModal').style.display = 'none';
+}
+
+function toggleDontShow() {
+  let checked = document.getElementById('dontShowAgain').checked;
+  localStorage.setItem('hideGuide964', checked ? 'true' : 'false');
+}
+
+window.onload = function() {
+  if (localStorage.getItem('hideGuide964') !== 'true') {
+    showWelcomeModal();
+  }
+  checkShopStatus();
+}
+
+function checkShopStatus() {
+  let now = new Date();
+  let hour = now.getHours();
+  let statusEl = document.getElementById('shopStatus');
+  let isOpen = (hour >= 18 || hour < 2);
+  
+  if (isOpen) {
+    statusEl.innerHTML = "🟢 الشاحنة مفتوحة الآن (أهلاً بالسهرة)";
+    statusEl.classList.remove('closed');
+  } else {
+    statusEl.innerHTML = "🔴 الشاحنة مغلقة حالياً (تفتح 6:00 م)";
+    statusEl.classList.add('closed');
+  }
+}
+
+function openMap() {
+  let userAgent = navigator.userAgent || navigator.vendor || window.opera;
+  if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+    window.location.href = `http://maps.apple.com/?q=Al-Mudaraa+Park,+Basra,+Iraq`;
+  } else {
+    window.location.href = `https://maps.app.goo.gl/BasraMudaraaPark`;
+  }
+}
+
+let slideIndex = 0;
+function showSlides() {
+  let slides = document.getElementsByClassName("slide");
+  if (slides.length === 0) return;
+  for (let i = 0; i < slides.length; i++) slides[i].style.display = "none";
+  slideIndex++;
+  if (slideIndex > slides.length) slideIndex = 1;
+  if (slides[slideIndex-1]) slides[slideIndex-1].style.display = "block";
+  setTimeout(showSlides, 3000);
+}
+setTimeout(showSlides, 500);
+
+function shareMenu() {
+  if (navigator.share) {
+    navigator.share({ title: '964 Street Bites', url: window.location.href }).catch(()=>{});
+  } else {
+    navigator.clipboard.writeText(window.location.href);
+    alert("تم نسخ رابط المنيو بنجاح!");
+  }
+}
+</script>
 
 </body>
 </html>
